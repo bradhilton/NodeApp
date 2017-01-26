@@ -58,9 +58,9 @@ extension Node {
     ) {
         self.init(state: state)
         var ignoreUpdate = false
-        parent.children.append { parentState in
-            guard !ignoreUpdate else { return }
-            updateChild(parentState, &self.state)
+        parent.children.append { [weak self] parentState in
+            guard let child = self, !ignoreUpdate else { return }
+            updateChild(parentState, &child.state)
         }
         self.parent = { [weak parent] state in
             guard let parent = parent else { return }
